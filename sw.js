@@ -1,4 +1,4 @@
-const CACHE = 'four-day-strength-v3';
+const CACHE = 'four-day-strength-v3-1';
 const ASSETS = ['./', './index.html', './manifest.webmanifest'];
 self.addEventListener('install', e => {
   self.skipWaiting();

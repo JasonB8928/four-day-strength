@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="4-Day Strength">
-<title>Four-Day Strength V3</title>
+<title>Four-Day Strength V3.1</title>
 <link rel="manifest" href="manifest.webmanifest">
 <style>
 :root{
@@ -54,12 +54,22 @@ button.done{background:var(--ok);color:#fff}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .row3{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:8px}
 input,select,textarea{width:100%;font:inherit;padding:12px;border:1px solid var(--line);border-radius:12px;
-  background:var(--bg);color:var(--text);appearance:none}
+  background:var(--bg);color:var(--text);appearance:none;-webkit-appearance:none}
+input[type=checkbox]{appearance:auto;-webkit-appearance:checkbox;width:auto;padding:0;accent-color:var(--brand)}
+input[type=file]{appearance:auto;-webkit-appearance:none;padding:9px}
 input:focus,select:focus,textarea:focus{outline:2px solid var(--brand);outline-offset:1px}
 label.lab{display:block;font-size:13px;font-weight:700;color:var(--muted);margin:12px 0 0}
 label.lab input,label.lab select{margin-top:5px}
-label.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:650;margin:12px 0}
-label.sw input{width:auto;transform:scale(1.35);margin-right:4px}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:11px 0;border-top:1px solid var(--line)}
+.toggle:first-of-type{border-top:0}
+.toggle .tl{font-weight:650;font-size:15px}
+.toggle .tl small{display:block;font-weight:500;font-size:12px;color:var(--muted);margin-top:2px}
+.sbtn{min-width:86px;min-height:38px;padding:8px 14px;border-radius:999px;font-size:14px;font-weight:750;
+  border:1px solid var(--line);background:var(--chip);color:var(--muted)}
+.sbtn.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.sbtn.off{background:var(--chip);color:var(--muted)}
+.sbtn.na{opacity:.5}
 .wt{font-size:24px;font-weight:800;letter-spacing:-.5px;white-space:nowrap}
 .adj{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;margin-top:12px}
 .adj input{text-align:center;font-size:18px;font-weight:700}
@@ -101,7 +111,7 @@ nav button.on{color:#fff;background:rgba(255,255,255,.14)}
 </style>
 </head>
 <body>
-<header>Four-Day Strength <span style="opacity:.55;font-weight:600">V3</span></header>
+<header>Four-Day Strength <span style="opacity:.55;font-weight:600">V3.1</span></header>
 <main>
   <section id="home" class="pg"></section>
   <section id="work" class="pg hide"></section>
@@ -119,8 +129,8 @@ nav button.on{color:#fff;background:rgba(255,255,255,.14)}
 </nav>
 <div id="toast" class="toast hide"></div>
 <script>
-/* Four-Day Strength V3 */
-const V = 3;
+/* Four-Day Strength V3.1 */
+const V = 3.1;
 const LADDER = [2.5, 2, 1, 0.5];
 const LIFTS = ['Squat', 'Bench press', 'Press', 'Deadlift'];
 const DEFS = [
@@ -139,8 +149,10 @@ const DEF = {
   hist: [], bw: [], active: null, undo: null,
   set: { second90: false, sound: true, vibrate: true, wake: true, recovery: 48, target: 60, chinMode: 'bw', chinWeight: 5 }
 };
+const CAN_VIBRATE = typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
+const CAN_WAKE = typeof navigator !== 'undefined' && 'wakeLock' in navigator;
 
-let db = loadDb(), T = { n: 0, id: null, run: false }, AC = null, wake = null, chartLift = 'Squat', editIdx = -1;
+let db = loadDb(), T = { n: 0, id: null, run: false }, AC = null, wake = null, chartLift = 'Squat';
 
 function cl(x) { return JSON.parse(JSON.stringify(x)); }
 function deep(a, b) { for (const k in b) { if (b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])) a[k] = deep(a[k] || {}, b[k]); else if (a[k] === undefined) a[k] = b[k]; } return a; }
@@ -162,9 +174,10 @@ function unlockAudio() {
     s.buffer = b; s.connect(AC.destination); s.start(0);
   } catch (e) { }
 }
-function beep() {
-  if (!db.set.sound) return;
+function beep(force) {
+  if (!db.set.sound && !force) return;
   try {
+    unlockAudio();
     if (!AC) return;
     if (AC.state === 'suspended') AC.resume();
     const t0 = AC.currentTime;
@@ -179,7 +192,8 @@ function beep() {
     });
   } catch (e) { }
 }
-async function getWake() { if (!db.set.wake) return; try { if ('wakeLock' in navigator && !wake) wake = await navigator.wakeLock.request('screen'); } catch (e) { } }
+function buzz() { if (db.set.vibrate && CAN_VIBRATE) { try { navigator.vibrate([300, 120, 300]); } catch (e) { } } }
+async function getWake() { if (!db.set.wake || !CAN_WAKE) return; try { if (!wake) wake = await navigator.wakeLock.request('screen'); } catch (e) { } }
 function dropWake() { try { if (wake) { wake.release(); wake = null; } } catch (e) { } }
 document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && db.active) getWake(); });
 
@@ -299,7 +313,7 @@ function mv(d) { const a = db.active; if (d > 0 && a.ei === a.ex.length - 1) ret
 /* ---------- timer ---------- */
 function clock(n) { n = Math.max(0, n); return String(Math.floor(n / 60)).padStart(2, '0') + ':' + String(n % 60).padStart(2, '0'); }
 function startT(n) { stopT(); unlockAudio(); getWake(); T = { n: n, run: true, id: setInterval(tick, 1000) }; }
-function tick() { T.n--; const x = document.getElementById('tn'); if (x) x.textContent = clock(T.n); if (T.n <= 0) { stopT(); beep(); if (db.set.vibrate && navigator.vibrate) navigator.vibrate([300, 120, 300]); toast('Rest complete'); render(); } }
+function tick() { T.n--; const x = document.getElementById('tn'); if (x) x.textContent = clock(T.n); if (T.n <= 0) { stopT(); beep(); buzz(); toast('Rest complete'); render(); } }
 function stopT() { clearInterval(T.id); T = { n: T.n > 0 ? T.n : 0, run: false, id: null }; }
 function togT() { if (T.run) { stopT(); render(); } else { startT(T.n || db.secs[db.active.ex[db.active.ei].n] || 180); render(); } }
 function adjT(d) { T.n = Math.max(0, T.n + d); const x = document.getElementById('tn'); if (x) x.textContent = clock(T.n); }
@@ -394,7 +408,6 @@ function condPct(days) {
   return Math.round(100 * done.filter(h => h.conditioning).length / done.length);
 }
 function dash() {
-  const chin = db.hist.slice(-1)[0];
   const chinReady = db.hist.slice(-4).some(h => (h.ex || []).some(e => e.n === 'Chin-ups' && e.reps.length >= 3 && e.reps.every(x => x >= 10)));
   const bwLast = db.bw.length ? db.bw[db.bw.length - 1] : null;
   const bw30 = (() => { const cut = Date.now() - 30 * 864e5; const s = db.bw.filter(x => new Date(x.date) >= cut); return s.length >= 2 ? (s[s.length - 1].value - s[0].value).toFixed(1) : null; })();
@@ -434,7 +447,7 @@ function history_() {
     + `<div class="card"><button class="ghost" onclick="undo()">Undo last change</button></div>`;
 }
 function edit(i) {
-  editIdx = i; const w = db.hist[i];
+  const w = db.hist[i];
   document.querySelectorAll('.pg').forEach(x => x.classList.add('hide'));
   document.getElementById('history').classList.remove('hide');
   document.getElementById('history').innerHTML = `<h2>Edit workout</h2>
@@ -459,8 +472,7 @@ function saveEdit(i) {
   else toast('History updated');
   go('history');
 }
-function delSession(i) { if (!confirm('Delete this session permanently?')) return; db.undo = cl(db); db.hist.splice(i, 1); save(); recalcPrompt(); go('history'); }
-function recalcPrompt() { if (confirm('Recalculate current working weights from the remaining history?')) recalc(); }
+function delSession(i) { if (!confirm('Delete this session permanently?')) return; db.undo = cl(db); db.hist.splice(i, 1); save(); if (confirm('Recalculate current working weights from the remaining history?')) recalc(); go('history'); }
 function recalc() {
   LIFTS.forEach(n => {
     const rows = db.hist.filter(h => h.status !== 'skipped').flatMap(h => (h.ex || []).filter(e => e.n === n && e.weight));
@@ -522,10 +534,17 @@ function draw() {
   x.fillText(fmt(d[0].d), L - 10, c.height - 14);
   if (d.length > 1) x.fillText(fmt(d[d.length - 1].d), L + W - 30, c.height - 14);
   const first = d[0].v, last = d[d.length - 1].v, misses = d.filter(p => p.miss).length;
-  document.getElementById('cstat').innerHTML = `${d.length} sessions · from ${first} to ${last} (${last - first >= 0 ? '+' : ''}${r5(last - first)})${misses ? ` · <span style="color:#dc2626">${misses} missed</span>` : ''}${chartLift === 'Squat' || chartLift === 'Press' || chartLift === 'Bench press' || chartLift === 'Deadlift' ? ' · red = missed, grey = light day' : ''}`;
+  document.getElementById('cstat').innerHTML = `${d.length} sessions · from ${first} to ${last} (${last - first >= 0 ? '+' : ''}${r5(last - first)})${misses ? ` · <span style="color:#dc2626">${misses} missed</span>` : ''}${LIFTS.indexOf(chartLift) >= 0 ? ' · red = missed, grey = light day' : ''}`;
 }
 
 /* ---------- settings ---------- */
+function tog(key, label, sub, available) {
+  const on = !!db.set[key];
+  if (available === false) return `<div class="toggle"><div class="tl">${label}<small>${sub}</small></div>
+    <button class="sbtn na" onclick="toast('Not supported by Safari on iPhone')">N/A</button></div>`;
+  return `<div class="toggle"><div class="tl">${label}${sub ? `<small>${sub}</small>` : ''}</div>
+    <button class="sbtn ${on ? 'on' : 'off'}" onclick="db.set.${key}=${!on};save();settings();toast('${label}: ${on ? 'off' : 'on'}')">${on ? 'On' : 'Off'}</button></div>`;
+}
 function settings() {
   const s = db.set;
   document.getElementById('settings').innerHTML = `<h2>Settings</h2>
@@ -535,9 +554,7 @@ function settings() {
       <select onchange="db.inc['${n}']=parseFloat(this.value);save()">${[5, 2.5, 2, 1, 0.5].map(v => `<option value="${v}" ${db.inc[n] == v ? 'selected' : ''}>+${v} kg</option>`).join('')}</select></div></label>`).join('')}
     <div class="note sm">Increments are limited to what your plates can load: 2.5, 2, 1 and 0.5 kg (0.25/0.5/1 kg pairs).</div></div>
   <div class="card"><div class="kicker">PROGRAMME</div>
-    <label class="sw">Second press of the day at 90% (light)
-      <input type="checkbox" ${s.second90 ? 'checked' : ''} onchange="db.set.second90=this.checked;save();settings()"></label>
-    <div class="note sm">Off by default. Turn this on when your presses stall: the first press of the day keeps progressing, the second becomes a light 90% exposure, so each press progresses once weekly.</div>
+    ${tog('second90', 'Second press of the day at 90%', 'Off by default. Turn on when your presses stall: the first press keeps progressing, the second becomes a light exposure.')}
     <label class="lab">Chin-ups
       <select onchange="db.set.chinMode=this.value;save();settings()">
         <option value="bw" ${s.chinMode === 'bw' ? 'selected' : ''}>Bodyweight, 3 sets</option>
@@ -545,19 +562,21 @@ function settings() {
     ${s.chinMode === 'weighted' ? `<label class="lab">Added weight (kg)<input inputmode="decimal" value="${s.chinWeight}" onchange="db.set.chinWeight=parseFloat(this.value)||0;save()"></label>` : ''}</div>
   <div class="card"><div class="kicker">TIMER</div>
     ${['Squat', 'Bench press', 'Press', 'Chin-ups'].map(n => `<label class="lab">${n} rest (seconds)<input inputmode="numeric" value="${db.secs[n]}" onchange="db.secs['${n}']=parseInt(this.value)||0;save()"></label>`).join('')}
-    <label class="sw">Sound alert<input type="checkbox" ${s.sound ? 'checked' : ''} onchange="db.set.sound=this.checked;save()"></label>
-    <label class="sw">Vibration<input type="checkbox" ${s.vibrate ? 'checked' : ''} onchange="db.set.vibrate=this.checked;save()"></label>
-    <label class="sw">Keep screen awake during rest<input type="checkbox" ${s.wake ? 'checked' : ''} onchange="db.set.wake=this.checked;save()"></label>
-    <button class="ghost" onclick="unlockAudio();beep();toast('If you heard nothing, check the silent switch')">Test sound</button>
-    <div class="note sm">iOS mutes web audio when the silent switch is on. Vibration still works.</div></div>
+    <div style="margin-top:14px">
+    ${tog('sound', 'Sound alert', 'Three beeps when the rest timer reaches zero.')}
+    ${tog('vibrate', 'Vibration', 'Safari on iPhone does not support web vibration.', CAN_VIBRATE)}
+    ${tog('wake', 'Keep screen awake during rest', CAN_WAKE ? 'Stops the screen sleeping so the alert always fires.' : 'Not available in this browser version.', CAN_WAKE)}
+    </div>
+    <button class="ghost big" onclick="beep(true);toast('If you heard nothing, check the silent switch')">Test sound</button>
+    <div class="note sm">The iPhone silent switch mutes all web audio. Test sound plays regardless of the toggle above.</div></div>
   <div class="card"><div class="kicker">RECOVERY</div>
     <label class="lab">Recovery warning (hours)<input inputmode="numeric" value="${s.recovery}" onchange="db.set.recovery=parseInt(this.value)||48;save()"></label>
     <label class="lab">Workout target (minutes)<input inputmode="numeric" value="${s.target}" onchange="db.set.target=parseInt(this.value)||60;save()"></label></div>
   <div class="card"><div class="kicker">DATA</div>
     <div class="row2"><button onclick="expJSON()">Export JSON</button><button class="ghost" onclick="expCSV()">Export CSV</button></div>
     <label class="lab">Restore from JSON backup<input type="file" accept=".json,application/json" onchange="impJSON(this.files[0])"></label>
-    <button class="ghost danger" onclick="wipe()">Reset all data</button></div>
-  <div class="card muted sm">Version 3 · four-day upper/lower novice adaptation. All programming changes are recommendations you accept, never automatic.</div>`;
+    <button class="ghost danger big" onclick="wipe()">Reset all data</button></div>
+  <div class="card muted sm">Version 3.1 · four-day upper/lower novice adaptation. All programming changes are recommendations you accept, never automatic.</div>`;
 }
 function dl(name, text, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: type })); a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
 function expJSON() { dl('four-day-strength-' + new Date().toISOString().slice(0, 10) + '.json', JSON.stringify(db, null, 2), 'application/json'); }
