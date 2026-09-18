@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="4-Day Strength">
-<title>Four-Day Strength V3.1</title>
+<title>Four-Day Strength V3.2</title>
 <link rel="manifest" href="manifest.webmanifest">
 <style>
 :root{
@@ -111,7 +111,7 @@ nav button.on{color:#fff;background:rgba(255,255,255,.14)}
 </style>
 </head>
 <body>
-<header>Four-Day Strength <span style="opacity:.55;font-weight:600">V3.1</span></header>
+<header>Four-Day Strength <span style="opacity:.55;font-weight:600">V3.2</span></header>
 <main>
   <section id="home" class="pg"></section>
   <section id="work" class="pg hide"></section>
@@ -129,7 +129,7 @@ nav button.on{color:#fff;background:rgba(255,255,255,.14)}
 </nav>
 <div id="toast" class="toast hide"></div>
 <script>
-/* Four-Day Strength V3.1 */
+/* Four-Day Strength V3.2 */
 const V = 3.1;
 const LADDER = [2.5, 2, 1, 0.5];
 const LIFTS = ['Squat', 'Bench press', 'Press', 'Deadlift'];
@@ -166,6 +166,8 @@ function fmt(d) { return new Date(d).toLocaleDateString([], { day: 'numeric', mo
 function fmtFull(d) { return new Date(d).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }); }
 
 /* ---------- audio + wake ---------- */
+const BEEP_SRC = 'data:audio/wav;base64,UklGRiQZAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAZAACAgIGCgX57eXt/hYmJhHx1cnV+iJCRiXxvam57i5eYjnxqYmd4jZ6glH1mWl9zjqOpm39jU1dujqmxooNhTE9oja25qodfRUZhi7HBs4xfPz1aiLLFuJFiQDxWhK/FupVmQjtTgKzEvZlqRTpQe6nDv51uRzpNd6XCwKFySjpKcqHAwqV3TTpHbp2/w6l7UDpFapm9xKyAUztCZpW6xa+EVjxAYpG4xbKIWj0/Xo21xbWNXj89WoiyxbiRYkA8VoSvxbqVZkI7U4CsxL2ZakU6UHupw7+dbkc6TXelwsChcko6SnKhwMKld006R26dv8Ope1A6RWqZvcSsf1M7QmaVusWvhFY8QGKRuMWyiFo9P16NtcW1jV4/PVqIssW4kWJAPFaEr8W6lWZCO1N/rMS9mWpFOlB7qcO/nW5HOk13pcLAoXJKOkpyocDCpXdNOkdunb/DqXtQOkVqmb3ErH9TO0JmlbrFr4RWPEBikbjFsohaPT9ejbXFtY1ePz1aiLLFuJFiQDxWhK/FupVmQjtTgKzEvZlqRTpQe6nDv51uRzpNd6XCwKFySjpKcqHAwqV3TTpHbp2/w6l7UDpFapm9xKx/UztCZpW6xa+EVjxAYpG4xbKIWj0/Xo21xbWNXj89WoiyxbiRYkA8VoSvxbqVZkI7U4CsxL2ZakU6UHupw7+dbkc6TXelwsChcko6SnKhwMKld006R26dv8Ope1A6RWqZvcSsf1M7QmaVusWvhFY8QGKRuMWyiFo9P16NtcW1jV4/PVqIssW4kWJAPFaEr8W6lWZCO1N/rMS9mWpFOlB7qcO/nW5HOk13pcLAoXJKOkpyocDCpXdNOkdunb/DqXtQOkVqmb3ErIBTO0JmlbrFr4RWPEBikbjFsohaPT9ejbXFtY1ePz1aiLLFuJFiQDxWhK/FupVmQjtTgKzEvZlqRTpQe6nDv51uRzpNd6XCwKFySjpKcqHAwqV3TTpHbp2/w6l7UDpFapm9xKx/UztCZpW6xa+EVjxAYpG4xbKIWj0/Xo21xbWNXj89WoiyxbiRYkA8VoSvxbqVZkI7U4CsxL2ZakU6UHupw7+dbkc6TXelwsChcko6SnKhwMKld006R26dv8Ope1A6RWqZvcSsf1M7QmaVusWvhFY8QGKRuMWyiFo9P16NtcW1jV4/PVqIssW4kWJAPFaEr8W6lWZCO1OArMS9mWpFOlB7qcO/nW5HOk13pcLAoXJKOkpyocDCpXdNOkdunb/DqXtQOkVqmb3ErH9TO0JmlbrFr4RWPEBikbjFsohaPT9ejbXFtY1ePz1aiLLFuJFiQDxWhK/FupVmQjtTgKzEvZlqRTpQe6nDv51uRzpNd6XCwKFySjpKcqHAwqV3TTpHbp2/w6l7UDpFapm9xKx/UztCZpW6xa+EVjxAYpG4xbKIWj0/Xo21xbWNXj89WoiyxbiRYkA8VoSvxbqVZkI7U4CsxL2ZakU6UHupw7+dbkc6TXelwsChcko6SnKhwMKld006R26dv8Ope1A6RWqZvcSsf1M7QmaVusWvhFY8QGKRuMWyiFo9P16NtcW1jV4/PVqIssW4kWJAPFaEr8W6lWZCO1N/q8K6mGtJQFR8o7q1mHFSSFd5nLGvmHZaT1t3lamplnpiV2B2j6GilH1pX2V2ipmbkX9vZ2t3hpGTjYF1b3F5g4qMiIF6d3h8gYSEgoB/f4CAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBgoF+e3l7f4WJiYR8dXJ1foiQkYl8b2pue4uXmI58amJneI2eoJR9Zlpfc46jqZt/Y1NXbo6psaKDYUxPaI2tuaqHX0VGYYuxwbOMXz89WoiyxbiRYkA8VoSvxbqVZkI7U4CsxL2ZakU6UHupw7+dbkc6TXelwsChcko6SnKhwMKld006R26dv8Ope1A6RWqZvcSsgFM7QmaVusWvhFY8QGKRuMWyiFo9P16NtcW1jV4/PVqIssW4kWJAPFaEr8W6lWZCO1OArMS9mWpFOlB7qcO/nW5HOk13pcLAoXJKOkpyocDCpXdNOkdunb/DqXtQOkVqmb3ErH9TO0JmlbrFr4RWPEBikbjFsohaPT9ejbXFtY1ePz1aiLLFuJFiQDxWhK/FupVmQjtTf6zEvZlqRTpQe6nDv51uRzpNd6XCwKFySjpKcqHAwqV3TTpHbp2/w6l7UDpFapm9xKx/UztCZpW6xa+EVjxAYpG4xbKIWj0/Xo21xbWNXj89WoiyxbiRYkA8VoSvxbqVZkI7U4CsxL2ZakU6UHupw7+dbkc6TXelwsChcko6SnKhwMKld006R26dv8Ope1A6RWqZvcSsf1M7QmaVusWvhFY8QGKRuMWyiFo9P16NtcW1jV4/PVqIssW4kWJAPFaEr8W6lWZCO1OArMS9mWpFOlB7qcO/nW5HOk13pcLAoXJKOkpyocDCpXdNOkdunb/DqXtQOkVqmb3ErH9TO0JmlbrFr4RWPEBikbjFsohaPT9ejbXFtY1ePz1aiLLFuJFiQDxWhK/FupVmQjtTf6zEvZlqRTpQe6nDv51uRzpNd6XCwKFySjpKcqHAwqV3TTpHbp2/w6l7UDpFapm9xKyAUztCZpW6xa+EVjxAYpG4xbKIWj0/Xo21xbWNXj89WoiyxbiRYkA8VoSvxbqVZkI7U4CsxL2ZakU6UHupw7+dbkc6TXelwsChcko6SnKhwMKld006R26dv8Ope1A6RWqZvcSsf1M7QmaVusWvhFY8QGKRuMWyiFo9P16NtcW1jV4/PVqIssW4kWJAPFaEr8W6lWZCO1OArMS9mWpFOlB7qcO/nW5HOk13pcLAoXJKOkpyocDCpXdNOkdunb/DqXtQOkVqmb3ErH9TO0JmlbrFr4RWPEBikbjFsohaPT9ejbXFtY1ePz1aiLLFuJFiQDxWhK/FupVmQjtTgKzEvZlqRTpQe6nDv51uRzpNd6XCwKFySjpKcqHAwqV3TTpHbp2/w6l7UDpFapm9xKx/UztCZpW6xa+EVjxAYpG4xbKIWj0/Xo21xbWNXj89WoiyxbiRYkA8VoSvxbqVZkI7U4CsxL2ZakU6UHupw7+dbkc6TXelwsChcko6SnKhwMKld006R26dv8Ope1A6RWqZvcSsf1M7QmaVusWvhFY8QGKRuMWyiFo9P16NtcW1jV4/PVqIssW4kWJAPFaEr8W6lWZCO1OArMS9mWpFOlB7qcO/nW5HOk13pcLAoXJKOkpyocDCpXdNOkdunb/DqXtQOkVqmb3ErH9TO0JmlbrFr4RWPEBikbjFsohaPT9ejbXFtY1ePz1aiLLFuJFiQDxWhK/FupVmQjtTf6vCuphrSUBUfKO6tZhxUkhXeZyxr5h2Wk9bd5WpqZZ6Yldgdo+hopR9aV9ldoqZm5F/b2drd4aRk42BdW9xeYOKjIiBend4fIGEhIKAf3+AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYKBfnt5e3+FiYmEfHVydX6IkJGJfG9qbnuLl5iOfGpiZ3iNnqCUfWZaX3OOo6mbf2NTV26OqbGig2FMT2iNrbmqh19FRmGLscGzjF8/PVqIssW4kWJAPFaEr8W6lWZCO1OArMS9mWpFOlB7qcO/nW5HOk13pcLAoXJKOkpyocDCpXdNOkdunb/DqXtQOkVqmb3ErIBTO0JmlbrFr4RWPEBikbjFsohaPT9ejbXFtY1ePz1aiLLFuJFiQDxWhK/FupVmQjtTgKzEvZlqRTpQe6nDv51uRzpNd6XCwKFySjpKcqHAwqV3TTpHbp2/w6l7UDpFapm9xKx/UztCZpW6xa+EVjxAYpG4xbKIWj0/Xo21xbWNXj89WoiyxbiRYkA8VoSvxbqVZkI7U3+sxL2ZakU6UHupw7+dbkc6TXelwsChcko6SnKhwMKld006R26dv8Ope1A6RWqZvcSsf1M7QmaVusWvhFY8QGKRuMWyiFo9P16NtcW1jV4/PVqIssW4kWJAPFaEr8W6lWZCO1OArMS9mWpFOlB7qcO/nW5HOk13pcLAoXJKOkpyocDCpXdNOkdunb/DqXtQOkVqmb3ErH9TO0JmlbrFr4RWPEBikbjFsohaPT9ejbXFtY1ePz1aiLLFuJFiQDxWhK/FupVmQjtTgKzEvZlqRTpQe6nDv51uRzpNd6XCwKFySjpKcqHAwqV3TTpHbp2/w6l7UDpFapm9xKx/UztCZpW6xa+EVjxAYpG4xbKIWj0/Xo21xbWNXj89WoiyxbiRYkA8VoSvxbqVZkI7U3+sxL2ZakU6UHupw7+dbkc6TXelwsChcko6SnKhwMKld006R26dv8Ope1A6RWqZvcSsgFM7QmaVusWvhFY8QGKRuMWyiFo9P16NtcW1jV4/PVqIssW4kWJAPFaEr8W6lWZCO1OArMS9mWpFOlB7qcO/nW5HOk13pcLAoXJKOkpyocDCpXdNOkdunb/DqXtQOkVqmb3ErH9TO0JmlbrFr4RWPEBikbjFsohaPT9ejbXFtY1ePz1aiLLFuJFiQDxWhK/FupVmQjtTgKzEvZlqRTpQe6nDv51uRzpNd6XCwKFySjpKcqHAwqV3TTpHbp2/w6l7UDpFapm9xKx/UztCZpW6xa+EVjxAYpG4xbKIWj0/Xo21xbWNXj89WoiyxbiRYkA8VoSvxbqVZkI7U4CsxL2ZakU6UHupw7+dbkc6TXelwsChcko6SnKhwMKld006R26dv8Ope1A6RWqZvcSsf1M7QmaVusWvhFY8QGKRuMWyiFo9P16NtcW1jV4/PVqIssW4kWJAPFaEr8W6lWZCO1OArMS9mWpFOlB7qcO/nW5HOk13pcLAoXJKOkpyocDCpXdNOkdunb/DqXtQOkVqmb3ErH9TO0JmlbrFr4RWPEBikbjFsohaPT9ejbXFtY1ePz1aiLLFuJFiQDxWhK/FupVmQjtTgKzEvZlqRTpQe6nDv51uRzpNd6XCwKFySjpKcqHAwqV3TTpHbp2/w6l7UDpFapm9xKx/UztCZpW6xa+EVjxAYpG4xbKIWj0/Xo21xbWNXj89WoiyxbiRYkA8VoSvxbqVZkI7U3+rwrqYa0lAVHyjurWYcVJIV3mcsa+YdlpPW3eVqamWemJXYHaPoaKUfWlfZXaKmZuRf29na3eGkZONgXVvcXmDioyIgXp3eHyBhISCgH9/';
+let AEL = null, audioReady = false;
 function unlockAudio() {
   try {
     AC = AC || new (window.AudioContext || window.webkitAudioContext)();
@@ -173,25 +175,40 @@ function unlockAudio() {
     const b = AC.createBuffer(1, 1, 22050), s = AC.createBufferSource();
     s.buffer = b; s.connect(AC.destination); s.start(0);
   } catch (e) { }
+  try {
+    if (!AEL) { AEL = new Audio(BEEP_SRC); AEL.preload = 'auto'; AEL.load(); }
+    if (!audioReady) {
+      const v = AEL.volume; AEL.volume = 0;
+      const pr = AEL.play();
+      if (pr && pr.then) pr.then(() => { AEL.pause(); AEL.currentTime = 0; AEL.volume = v; audioReady = true; }).catch(() => { AEL.volume = v; });
+      else { AEL.pause(); AEL.currentTime = 0; AEL.volume = v; audioReady = true; }
+    }
+  } catch (e) { }
 }
+function schedule(ctx) {
+  const t0 = ctx.currentTime + 0.06;
+  [0, 0.34, 0.68].forEach(off => {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = 880;
+    o.connect(g); g.connect(ctx.destination);
+    g.gain.setValueAtTime(0.0001, t0 + off);
+    g.gain.exponentialRampToValueAtTime(0.35, t0 + off + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + off + 0.3);
+    o.start(t0 + off); o.stop(t0 + off + 0.32);
+  });
+}
+function playFile() { try { if (!AEL) AEL = new Audio(BEEP_SRC); AEL.currentTime = 0; const pr = AEL.play(); if (pr && pr.catch) pr.catch(() => { }); } catch (e) { } }
 function beep(force) {
   if (!db.set.sound && !force) return;
   try {
-    unlockAudio();
-    if (!AC) return;
-    if (AC.state === 'suspended') AC.resume();
-    const t0 = AC.currentTime;
-    [0, 0.34, 0.68].forEach(off => {
-      const o = AC.createOscillator(), g = AC.createGain();
-      o.type = 'sine'; o.frequency.value = 880;
-      o.connect(g); g.connect(AC.destination);
-      g.gain.setValueAtTime(0.0001, t0 + off);
-      g.gain.exponentialRampToValueAtTime(0.3, t0 + off + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + off + 0.3);
-      o.start(t0 + off); o.stop(t0 + off + 0.32);
-    });
-  } catch (e) { }
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'running') { schedule(AC); return; }
+    const pr = AC.resume();
+    if (pr && pr.then) pr.then(() => { if (AC.state === 'running') schedule(AC); else playFile(); }).catch(playFile);
+    else if (AC.state === 'running') schedule(AC); else playFile();
+  } catch (e) { playFile(); }
 }
+function audioState() { return AC ? AC.state : 'not created'; }
 function buzz() { if (db.set.vibrate && CAN_VIBRATE) { try { navigator.vibrate([300, 120, 300]); } catch (e) { } } }
 async function getWake() { if (!db.set.wake || !CAN_WAKE) return; try { if (!wake) wake = await navigator.wakeLock.request('screen'); } catch (e) { } }
 function dropWake() { try { if (wake) { wake.release(); wake = null; } } catch (e) { } }
@@ -567,7 +584,7 @@ function settings() {
     ${tog('vibrate', 'Vibration', 'Safari on iPhone does not support web vibration.', CAN_VIBRATE)}
     ${tog('wake', 'Keep screen awake during rest', CAN_WAKE ? 'Stops the screen sleeping so the alert always fires.' : 'Not available in this browser version.', CAN_WAKE)}
     </div>
-    <button class="ghost big" onclick="beep(true);toast('If you heard nothing, check the silent switch')">Test sound</button>
+    <button class="ghost big" onclick="unlockAudio();beep(true);setTimeout(()=>toast('Audio: '+audioState()+'. No sound? Check the silent switch.'),400)">Test sound</button>
     <div class="note sm">The iPhone silent switch mutes all web audio. Test sound plays regardless of the toggle above.</div></div>
   <div class="card"><div class="kicker">RECOVERY</div>
     <label class="lab">Recovery warning (hours)<input inputmode="numeric" value="${s.recovery}" onchange="db.set.recovery=parseInt(this.value)||48;save()"></label>
@@ -576,7 +593,7 @@ function settings() {
     <div class="row2"><button onclick="expJSON()">Export JSON</button><button class="ghost" onclick="expCSV()">Export CSV</button></div>
     <label class="lab">Restore from JSON backup<input type="file" accept=".json,application/json" onchange="impJSON(this.files[0])"></label>
     <button class="ghost danger big" onclick="wipe()">Reset all data</button></div>
-  <div class="card muted sm">Version 3.1 · four-day upper/lower novice adaptation. All programming changes are recommendations you accept, never automatic.</div>`;
+  <div class="card muted sm">Version 3.2 · four-day upper/lower novice adaptation. All programming changes are recommendations you accept, never automatic.</div>`;
 }
 function dl(name, text, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: type })); a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
 function expJSON() { dl('four-day-strength-' + new Date().toISOString().slice(0, 10) + '.json', JSON.stringify(db, null, 2), 'application/json'); }
@@ -604,6 +621,7 @@ function impJSON(f) {
 function wipe() { if (!confirm('Delete all data and start again from the default weights?')) return; db = cl(DEF); save(); go('home'); toast('All data reset'); }
 
 /* ---------- boot ---------- */
+['pointerdown','touchstart','click'].forEach(ev => window.addEventListener(ev, function once(){ unlockAudio(); ['pointerdown','touchstart','click'].forEach(e2 => window.removeEventListener(e2, once)); }, {once:false, passive:true}));
 window.addEventListener('pagehide', save);
 matchMedia('(prefers-color-scheme:dark)').addEventListener('change', () => { if (!document.getElementById('progress').classList.contains('hide')) draw(); });
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => { });
